@@ -22,10 +22,11 @@ class CreateContactoFragment : Fragment(R.layout.fragment_create_contacto) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCreateContactoBinding.bind(view)
 
-
+    if(!EXTRA_CREAR.isNullOrEmpty())
+    {
+        binding.botonModificar.isEnabled = true
+    }
         binding.botonModificar.setOnClickListener{}
-
-
 
 
 
