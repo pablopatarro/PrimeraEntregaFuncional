@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.pablogonzalezpatarro.organizador.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_agenda"
+        android:name="com.pablogonzalezpatarro.organizador.ui.agenda.AgendaFragment"
+        android:label="@string/menu_agenda"
+        tools:layout="@layout/fragment_agenda" >
+        <action
+            android:id="@+id/action_nav_agenda_to_contactoDetailFragment"
+            app:destination="@id/contactoDetailFragment" />
+        <action
+            android:id="@+id/action_nav_agenda_to_createContactoFragment"
+            app:destination="@id/createContactoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="com.pablogonzalezpatarro.organizador.ui.slideshow.SlideshowFragment"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/contactoDetailFragment"
+        android:name="com.pablogonzalezpatarro.organizador.ui.detail.ContactoDetailFragment"
+        android:label="fragment_contacto_detail"
+        tools:layout="@layout/fragment_contacto_detail" />
+    <fragment
+        android:id="@+id/createContactoFragment"
+        android:name="com.pablogonzalezpatarro.organizador.ui.create.CreateContactoFragment"
+        android:label="fragment_create_contacto"
+        tools:layout="@layout/fragment_create_contacto" >
+        <action
+            android:id="@+id/action_createContactoFragment_to_nav_agenda"
+            app:destination="@id/nav_agenda" />
+    </fragment>
+</navigation>

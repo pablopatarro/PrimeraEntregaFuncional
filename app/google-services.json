@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "127217827522",
+    "project_id": "organizador-66d8c",
+    "storage_bucket": "organizador-66d8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127217827522:android:8a7262757a79fe33edc55b",
+        "android_client_info": {
+          "package_name": "com.pablogonzalezpatarro.organizador"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127217827522-633r0usb5fd2eosfv8hrbaqick4ji1fn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjQT3eJ6Ox3N-xFHtFIlYgs-hT-Re-0XE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127217827522-633r0usb5fd2eosfv8hrbaqick4ji1fn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
