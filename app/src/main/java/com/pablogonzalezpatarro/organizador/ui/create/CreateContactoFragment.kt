@@ -18,10 +18,18 @@ class CreateContactoFragment : Fragment(R.layout.fragment_create_contacto) {
     companion object {
         const val EXTRA_CREAR = "contacto"
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCreateContactoBinding.bind(view)
+
+
+        binding.botonModificar.setOnClickListener{}
+
+
+
+
+
+
 
 /**************************FALTA HACER LA PARTE EN LA QUE SE MODIFICA EL CONTACTO ***************************/
         binding.botonCrear.setOnClickListener{

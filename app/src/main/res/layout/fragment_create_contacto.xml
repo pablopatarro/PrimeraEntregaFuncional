@@ -42,4 +42,11 @@
         android:backgroundTint="#FF3D00"
         android:layout_margin="20dp"
         android:text="Crear contacto" />
+
+    <Button
+        android:id="@+id/botonModificar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="Modificar datos" />
 </LinearLayout>
