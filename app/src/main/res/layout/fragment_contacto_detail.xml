@@ -1,14 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detail.ContactoDetailFragment">
+    android:orientation="vertical"
+    android:background="@color/cardview_dark_background">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--Utilizamos un nuevo componente: CardView, para estilizar el diseño del detail.-->
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="20dp"
+        android:backgroundTint="#E0F7FA">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/cardview_light_background"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imagen"
+                android:layout_width="300dp"
+                android:layout_height="280dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:id="@+id/tvNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:textColor="@color/black"
+                android:text="TextView"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/tvTelefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:textColor="@color/black"
+                android:text="TextView"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:textColor="@color/black"
+                android:text="TextView"
+                android:textSize="18dp" />
+
+            <Button
+                android:id="@+id/botonLlamar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Llamar"
+                android:layout_margin="4dp"
+                android:backgroundTint="@color/botonLlamar"
+                android:textSize="16dp"/>
+
+            <Button
+                android:id="@+id/botonEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enviar email"
+                android:layout_margin="4dp"
+                android:backgroundTint="@color/botonEmail"
+                android:textSize="16dp"/>
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    <Button
+        android:id="@+id/botonModificar"
+        android:layout_width="800px"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Modificar datos"
+        android:textSize="16dp"
+        android:backgroundTint="#E6039BE5"
+        android:layout_margin="8dp"/>
+
+
+
+</LinearLayout>

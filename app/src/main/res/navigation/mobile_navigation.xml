@@ -33,7 +33,11 @@
         android:id="@+id/contactoDetailFragment"
         android:name="com.pablogonzalezpatarro.organizador.ui.detail.ContactoDetailFragment"
         android:label="fragment_contacto_detail"
-        tools:layout="@layout/fragment_contacto_detail" />
+        tools:layout="@layout/fragment_contacto_detail" >
+        <action
+            android:id="@+id/action_contactoDetailFragment_to_createContactoFragment"
+            app:destination="@id/createContactoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createContactoFragment"
         android:name="com.pablogonzalezpatarro.organizador.ui.create.CreateContactoFragment"

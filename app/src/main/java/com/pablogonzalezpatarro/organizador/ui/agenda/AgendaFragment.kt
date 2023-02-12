@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
@@ -22,14 +23,14 @@ import com.pablogonzalezpatarro.organizador.databinding.FragmentAgendaBinding
 import com.pablogonzalezpatarro.organizador.objetos.Contacto
 import com.pablogonzalezpatarro.organizador.ui.create.CreateContactoFragment
 import com.pablogonzalezpatarro.organizador.ui.detail.ContactoDetailFragment
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class AgendaFragment : Fragment(R.layout.fragment_agenda) {
     private lateinit var binding: FragmentAgendaBinding
     private val agendaViewModel: AgendaViewModel by viewModels() { AgendaViewModelFactory() }
     private val adapter = ContactoAdapter(){ contacto -> agendaViewModel.navigateTo(contacto)  }
-
-
+    private lateinit var listaFiltrada: List<Contacto>
 /*
     private val binding get() = _binding!!
 
@@ -59,11 +60,8 @@ class AgendaFragment : Fragment(R.layout.fragment_agenda) {
         binding = FragmentAgendaBinding.bind(view).apply {
             recycler.adapter = adapter
         }
-//esto se implementa al final.
-        val busqueda = binding!!.buscador
 
         agendaViewModel.state.observe(viewLifecycleOwner){state->
-
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED){
                     state.contactos?.collect(){
@@ -94,7 +92,6 @@ class AgendaFragment : Fragment(R.layout.fragment_agenda) {
             }
 
 
-
         }//Fin del observe
 
     //Añadimos al fab un evento para que nos mande a la pantalla de creación
@@ -105,10 +102,4 @@ class AgendaFragment : Fragment(R.layout.fragment_agenda) {
 
     }//fin del onCreateView.
 
-   /*
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
-    */
 }

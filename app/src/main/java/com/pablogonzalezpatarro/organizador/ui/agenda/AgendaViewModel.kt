@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.pablogonzalezpatarro.organizador.model.RepoDB
 import com.pablogonzalezpatarro.organizador.objetos.Contacto
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 
 class AgendaViewModel() : ViewModel() {
 
@@ -44,6 +46,7 @@ class AgendaViewModel() : ViewModel() {
         val navigateTo: Contacto? = null,
         val navigateToCreate: Boolean = false
     )
+
 
 }
 

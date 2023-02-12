@@ -10,13 +10,12 @@ import com.pablogonzalezpatarro.organizador.objetos.Contacto
 
 class ContactoAdapter (val listener: (Contacto)->Unit):RecyclerView.Adapter<ContactoAdapter.ViewHolder>(){
 
-    var contactos = listOf<Contacto>(Contacto("Lola","965236","lola@gmail.com"))
+    var contactos = emptyList<Contacto>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.view_contacto,parent,false)
         return ViewHolder(view)
     }
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val contacto = contactos[position]
@@ -29,16 +28,16 @@ class ContactoAdapter (val listener: (Contacto)->Unit):RecyclerView.Adapter<Cont
 
     override fun getItemCount(): Int = contactos.size
 
-
     class ViewHolder(view: View):RecyclerView.ViewHolder(view){
         private  val binding = ViewContactoBinding.bind(view)
 
         fun bind(contacto: Contacto)
         {
-            binding.nombre.text = contacto.nombre
-            binding.telefono.text= contacto.telefono
+            binding.nombre.text = "Nombre: "+contacto.nombre
+            binding.telefono.text= "Número: "+contacto.telefono
         }
     }
+
 
 
 }

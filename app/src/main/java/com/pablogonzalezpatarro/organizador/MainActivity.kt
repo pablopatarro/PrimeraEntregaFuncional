@@ -1,11 +1,20 @@
 package com.pablogonzalezpatarro.organizador
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -14,18 +23,25 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.pablogonzalezpatarro.organizador.databinding.ActivityMainBinding
-
+import com.pablogonzalezpatarro.organizador.model.RepoDB
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileWriter
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var mainViewModel:MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         //Botón de cierre de sesión.
         binding.appBarMain.fab.setOnClickListener {
@@ -50,8 +66,6 @@ class MainActivity : AppCompatActivity() {
         var headerTitle = headerView.findViewById<TextView>(R.id.tvEmail)
         headerTitle.text = FirebaseAuth.getInstance().currentUser?.email.toString()
 
-
-
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -73,6 +87,78 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.borrarCuenta -> {
+                ventanaConfirmación()
+                return true
+            }
+            R.id.exportarContactosCSV -> {
+                exportarContactosCSV()
+            return true
+        }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun exportarContactosCSV() {
+        //Hacemos una corrutina para obtener los contactos...
+        mainViewModel.state.observe(this) {estado->
+            lifecycleScope.launch(Dispatchers.Main) {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    estado.contactos?.collect { contactos ->
+
+                        val archivoCSV = File(Environment.getExternalStorageDirectory().toString() + "/contactos.csv" )
+                        val escritor = FileWriter(archivoCSV)
+                        escritor.append("nombre,telefono,email\n")
+
+                        println(contactos.toString())
+                        contactos.forEach { contacto ->
+                            escritor.append("${contacto.nombre},${contacto.telefono},${contacto.email}\n")
+                            println(contacto.nombre)
+                        }
+
+                        escritor.flush()
+                        escritor.close()
+                    }
+                }
+            }
+
+
+
+
+            }
+
+
+
+        }//Fin de la función exportar.
+
+
+
+
+
+
+
+    private fun ventanaConfirmación() {
+
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("¿Estás seguro de que deseas eliminar la cuenta?")
+            .setPositiveButton("Sí", DialogInterface.OnClickListener { dialog, id ->
+                RepoDB.eliminarCuenta(this)
+                //Aquí navegamos al login.
+
+                FirebaseAuth.getInstance().signOut()
+                val intent = Intent(this@MainActivity,AuthActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+            })
+            .setNegativeButton("No", DialogInterface.OnClickListener { dialog, id ->
+            })
+        val alert = builder.create()
+        alert.show()
+
+    }
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
