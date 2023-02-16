@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#337B1FA2"
         android:orientation="vertical">
 
 
@@ -16,6 +17,7 @@
         android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_margin="16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/view_contacto"/>

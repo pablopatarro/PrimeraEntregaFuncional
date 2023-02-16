@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pablogonzalezpatarro.organizador.objetos.Contacto
 import com.google.firebase.firestore.ktx.snapshots
+import com.google.firebase.storage.FirebaseStorage
 import com.pablogonzalezpatarro.organizador.mensajeError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -68,10 +69,41 @@ object RepoDB {
            }
     }//Fin de modificarContacto
 
-    fun borrarContacto(contacto: Contacto,context: Context)
+    fun borrarContacto(contacto: Contacto,contexto: Context)
     {
-        //TODO
-        //Cogemos el usuario actual y le borramos el contacto pasado como parámetro.
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+        FirebaseFirestore.getInstance()
+            .collection(COLLECTION_USUARIOS)
+            .document(uid)
+            .collection(COLLECTION_CONTACTOS)
+            .whereEqualTo("email",contacto.email)
+            .get()
+            .addOnCompleteListener {
+                if(it.isSuccessful)
+                {
+                    //Si la búsqueda ha ido bien, cogemos el id del contacto
+                    val idParaBorrar=it.result.first().id
+                    //Ahora borramos.Si la operación va bien, se muestra un toast.
+                    // Si no, se muestra un diálogo de error.
+                    FirebaseFirestore.getInstance()
+                        .collection(COLLECTION_USUARIOS)
+                        .document(uid)
+                        .collection(COLLECTION_CONTACTOS)
+                        .document(idParaBorrar)
+                        .delete()
+                        .addOnSuccessListener {
+                            FirebaseStorage.getInstance().reference.child("fotos").child("foto_de_" + contacto.email).delete()
+                            Toast.makeText(contexto,"Contacto borrado con éxito",Toast.LENGTH_LONG).show()
+                        }
+                        .addOnFailureListener {
+                            mensajeError("No se puedo borrar el contacto\n"+it.toString(),contexto)
+                        }
+                }
+                else
+                {
+                    mensajeError("No se pudo encontrar el contacto",contexto)
+                }
+            }
 
     }
 

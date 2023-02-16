@@ -1,12 +1,11 @@
 package com.pablogonzalezpatarro.organizador.ui.agenda
 
+import android.content.Context
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import com.pablogonzalezpatarro.organizador.model.RepoDB
 import com.pablogonzalezpatarro.organizador.objetos.Contacto
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.launch
 
 class AgendaViewModel() : ViewModel() {
 
@@ -14,7 +13,6 @@ class AgendaViewModel() : ViewModel() {
     val state : LiveData<UiState> get() = _state
 
     var uid = FirebaseAuth.getInstance().currentUser?.uid
-    val contactos = RepoDB.getFlow(uid!!)
 
     init
     {
@@ -41,6 +39,10 @@ class AgendaViewModel() : ViewModel() {
         _state.value = _state.value?.copy(navigateToCreate = false)
     }
 
+    fun borrarContacto(contacto: Contacto, contexto: Context)
+    {
+        RepoDB.borrarContacto(contacto,contexto)
+    }
     data class UiState(
         val contactos : Flow<List<Contacto>>? = null,
         val navigateTo: Contacto? = null,

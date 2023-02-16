@@ -49,6 +49,7 @@ class CreateContactoFragment : Fragment(R.layout.fragment_create_contacto) {
                 binding.botonModificar.visibility= View.VISIBLE
                 binding.botonCrear.visibility = View.GONE
                 contactoAModificar = contacto
+                URI_ACTUAL=null
                 //Mostramos la imagen del contacto que queremos modificar en el campo correspondiente.
                 Glide.with(binding.imagenContacto)
                     .load(contacto.urlImagen)
@@ -73,45 +74,45 @@ class CreateContactoFragment : Fragment(R.layout.fragment_create_contacto) {
             val telefono = binding.etTelefono.text
             val email = binding.etEmail.text
 
-            if(URI_ACTUAL == null)
+            //Si alguno de los campos es vacío, se muestra un error
+            if(nombre.isEmpty() || telefono.isEmpty() || email.isEmpty())
             {
-                //Entra aquí si el usuario no elige una imagen...
-                mensajeError("Debe elegir una fotografía para el contacto",requireContext())
+                mensajeError("Todos los campos deben estar rellenados para crear un contacto",
+                    requireContext())
             }
             else
             {
-                //Si alguno de los campos es vacío, se muestra un error
-                if(nombre.isEmpty() || telefono.isEmpty() || email.isEmpty())
-                {
-                    mensajeError("Todos los campos deben estar rellenados para crear un contacto",
-                        requireContext())
-                }
-                else
-                {
-                    //Deberiamos coger la foto actual del usuario para mostrarla en el campo de la foto.
-                    //Aquí debemos recuperar la referencia a la imagen que acabamos de cargar...
+
+                var urlImagen = contactoAModificar.urlImagen.toString()
+                if(URI_ACTUAL != null) {
                     val storageRef = FirebaseStorage.getInstance().reference
+                    //Borramos la foto anterior...
+                    FirebaseStorage.getInstance().reference.child("fotos").child("foto_de_" + email).delete()
+
                     val refImagen = storageRef.child("fotos").child("foto_de_" + email)
-                   //"subimos" la foto al storage.
+                    //"subimos" la foto al storage.
                     val subidaFoto = refImagen.putFile(URI_ACTUAL!!)
-
                     subidaFoto.addOnSuccessListener {
-                        refImagen.downloadUrl.addOnSuccessListener { uri ->
-                            val urlImagen = uri.toString()
-                            //Aquí debemos guardar la imagen en Storage, recuperar la url y mandarsela al contacto.
-                            val nuevoContacto = Contacto(nombre.toString(),telefono.toString()
-                                                        ,email.toString(),urlImagen)
+                    refImagen.downloadUrl.addOnSuccessListener { uri ->
+                        urlImagen = uri.toString()
+                        //Aquí debemos guardar la imagen en Storage, recuperar la url y mandarsela al contacto.
 
-                            viewModel.modificarContacto(nuevoContacto,contactoAModificar,requireContext())
-                            Thread.sleep(500)
-                            findNavController().navigate(
-                                R.id.action_createContactoFragment_to_nav_agenda
-                            )
-                        }
-                    }//fin de la tarea de la foto
-
+                    }
+                }//fin de la tarea de la foto
                 }
+                val nuevoContacto = Contacto(nombre.toString(),telefono.toString()
+                    ,email.toString(),urlImagen)
+
+                viewModel.modificarContacto(nuevoContacto,contactoAModificar,requireContext())
+                Thread.sleep(500)
+                URI_ACTUAL=null
+                findNavController().navigate(
+                    R.id.action_createContactoFragment_to_nav_agenda
+                )
+
             }
+
+
         } //Fin evento modificar datos.
 
         binding.botonCrear.setOnClickListener{
@@ -147,6 +148,7 @@ class CreateContactoFragment : Fragment(R.layout.fragment_create_contacto) {
                                                     email.toString(),urlImagen)
                             viewModel.crearContacto(contacto, requireContext())
                             Thread.sleep(500)
+                            URI_ACTUAL=null
                             findNavController().navigate(
                                 R.id.action_createContactoFragment_to_nav_agenda
                             )
@@ -165,7 +167,7 @@ class CreateContactoFragment : Fragment(R.layout.fragment_create_contacto) {
 
         }//Fin de onViewCreate
 
-    @Deprecated("Deprecated in Java")
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK ){

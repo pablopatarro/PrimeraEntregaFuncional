@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#D9DCEDC8"
     tools:context=".AuthActivity" >
 
     <TextView
@@ -13,9 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Autenticación"
-        android:background="@color/azulMarinoFirebase"
+        android:background="#81C784"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,9 +73,9 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:backgroundTint="#3F51B5"
+                android:backgroundTint="#80BA68C8"
                 android:text="Registrar"
-                android:textColor="@color/white" />
+                android:textColor="@color/black" />
 
             <Button
                 android:id="@+id/btnAcceder"
@@ -83,9 +84,9 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:backgroundTint="#03A9F4"
+                android:backgroundTint="#7986CB"
                 android:text="Acceder"
-                android:textColor="@color/purple_700" />
+                android:textColor="#FCE4EC" />
         </LinearLayout>
 
     </LinearLayout>

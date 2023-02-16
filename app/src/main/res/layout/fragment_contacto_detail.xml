@@ -18,7 +18,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/cardview_light_background"
+            android:backgroundTint="#E3F2FD"
             android:orientation="vertical">
 
             <ImageView
@@ -84,7 +84,7 @@
         android:layout_gravity="center"
         android:text="Modificar datos"
         android:textSize="16dp"
-        android:backgroundTint="#E6039BE5"
+        android:backgroundTint="#BF039BE5"
         android:layout_margin="8dp"/>
 
 

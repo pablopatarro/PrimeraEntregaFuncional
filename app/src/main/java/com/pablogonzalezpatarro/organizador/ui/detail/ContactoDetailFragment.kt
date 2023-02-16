@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -31,9 +32,12 @@ class ContactoDetailFragment : Fragment(R.layout.fragment_contacto_detail) {
         viewModel.contacto.observe(viewLifecycleOwner){contacto->
             (requireActivity() as AppCompatActivity).supportActionBar?.title="Detalles del contacto"
 
+            binding.imagen.setImageDrawable(R.drawable.delete.toDrawable())
             binding.tvNombre.text = "Nombre: "+contacto.nombre
             binding.tvTelefono.text = "Teléfono: "+contacto.telefono
             binding.tvEmail.text = "Email: "+contacto.email
+
+
             //Metemos la imagen del contacto...
             Glide.with(binding.imagen)
                 .load(contacto.urlImagen)

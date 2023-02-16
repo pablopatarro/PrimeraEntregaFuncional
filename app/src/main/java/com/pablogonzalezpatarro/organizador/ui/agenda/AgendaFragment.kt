@@ -1,65 +1,55 @@
 package com.pablogonzalezpatarro.organizador.ui.agenda
 
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.SearchView
-import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.pablogonzalezpatarro.organizador.MainActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.pablogonzalezpatarro.organizador.AuthActivity
 import com.pablogonzalezpatarro.organizador.R
 import com.pablogonzalezpatarro.organizador.databinding.FragmentAgendaBinding
+import com.pablogonzalezpatarro.organizador.interfaces.SwipeToDeleteCallback
+import com.pablogonzalezpatarro.organizador.model.RepoDB
 import com.pablogonzalezpatarro.organizador.objetos.Contacto
 import com.pablogonzalezpatarro.organizador.ui.create.CreateContactoFragment
 import com.pablogonzalezpatarro.organizador.ui.detail.ContactoDetailFragment
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class AgendaFragment : Fragment(R.layout.fragment_agenda) {
     private lateinit var binding: FragmentAgendaBinding
     private val agendaViewModel: AgendaViewModel by viewModels() { AgendaViewModelFactory() }
     private val adapter = ContactoAdapter(){ contacto -> agendaViewModel.navigateTo(contacto)  }
-    private lateinit var listaFiltrada: List<Contacto>
-/*
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-    ): View {
-
-    val agendaViewModel = ViewModelProvider(this).get(AgendaViewModel::class.java)
-    val adapter = ContactoAdapter(){ contacto -> agendaViewModel.navigateTo(contacto)  }
-
-
-    _binding = FragmentAgendaBinding.inflate(inflater, container, false)
-    val root: View = binding.root
-        _binding = FragmentAgendaBinding.bind(view).apply {
-            recycler.adapter = adapter
-        }
-    //Aquí es donde hacemos la lógica de qué pasa cuando le dan a un contacto.
-
-    return root
-    }
-*/
      override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentAgendaBinding.bind(view).apply {
             recycler.adapter = adapter
         }
+
+    //Creamos un objeto SwipeToDeleteCallBack y sobreescribimos el método de deslizado.
+         val swipetoDeleteCallback = object : SwipeToDeleteCallback(requireContext()){
+             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                 val pos = viewHolder.bindingAdapterPosition
+                 //val position = viewHolder.adapterPosition
+                 val contacto:Contacto = adapter.contactos[pos]
+                 //Borramos el contacto del recycler, del adapter y de la base de datos.
+                 agendaViewModel.borrarContacto( contacto,requireContext() )
+             }
+         }
+
+         val itemTouchHelper = ItemTouchHelper(swipetoDeleteCallback)
+         itemTouchHelper.attachToRecyclerView(binding.recycler)
 
         agendaViewModel.state.observe(viewLifecycleOwner){state->
             lifecycleScope.launch {
@@ -101,5 +91,6 @@ class AgendaFragment : Fragment(R.layout.fragment_agenda) {
     }
 
     }//fin del onCreateView.
+
 
 }
