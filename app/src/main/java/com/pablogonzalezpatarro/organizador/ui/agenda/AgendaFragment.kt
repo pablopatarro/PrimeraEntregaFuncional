@@ -1,11 +1,7 @@
 package com.pablogonzalezpatarro.organizador.ui.agenda
 
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,12 +11,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
-import com.pablogonzalezpatarro.organizador.AuthActivity
 import com.pablogonzalezpatarro.organizador.R
 import com.pablogonzalezpatarro.organizador.databinding.FragmentAgendaBinding
-import com.pablogonzalezpatarro.organizador.interfaces.SwipeToDeleteCallback
-import com.pablogonzalezpatarro.organizador.model.RepoDB
+import com.pablogonzalezpatarro.organizador.SwipeToDeleteCallback
 import com.pablogonzalezpatarro.organizador.objetos.Contacto
 import com.pablogonzalezpatarro.organizador.ui.create.CreateContactoFragment
 import com.pablogonzalezpatarro.organizador.ui.detail.ContactoDetailFragment

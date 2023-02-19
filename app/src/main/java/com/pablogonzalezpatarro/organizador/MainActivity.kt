@@ -2,6 +2,7 @@ package com.pablogonzalezpatarro.organizador
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.view.Menu
@@ -10,6 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +35,7 @@ import java.io.FileWriter
 
 class MainActivity : AppCompatActivity() {
 
+    private val REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 1
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel:MainViewModel
@@ -108,34 +112,56 @@ class MainActivity : AppCompatActivity() {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     estado.contactos?.collect { contactos ->
 
-                        val archivoCSV = File(Environment.getExternalStorageDirectory().toString() + "/contactos.csv" )
-                        val escritor = FileWriter(archivoCSV)
-                        escritor.append("nombre,telefono,email\n")
+                        //Preguntar por permisos de escritura.
+                        if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            // Si los permisos no se han otorgado, mostrar diálogo para solicitarlos al usuario
+                            ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_WRITE_EXTERNAL_STORAGE)
+                        } else {
+                            // Si los permisos ya se han otorgado, continuar con la exportación de contactos
+                            //val archivoCSV = File(Environment.getExternalStorageDirectory().toString() + "/contactos.csv" )
+                            val carpeta = File(getExternalFilesDir(null),"Contactos")
+                            //Si la carpeta donde queremos guardar el fichero no existe, la creamos.
+                            if(!carpeta.exists())
+                            {
+                                carpeta.mkdir()
+                            }
+                            //Creamos el fichero, el writer y escribimos los contactos en el fichero.
+                            val ficheroCSV = File(carpeta,"contactos.csv")
+                            val escritor = FileWriter(ficheroCSV)
+                            escritor.append("nombre,telefono,email\n")
 
-                        println(contactos.toString())
-                        contactos.forEach { contacto ->
-                            escritor.append("${contacto.nombre},${contacto.telefono},${contacto.email}\n")
-                            println(contacto.nombre)
+                            println(contactos.toString())
+                            contactos.forEach { contacto ->
+                                escritor.append("${contacto.nombre},${contacto.telefono},${contacto.email}\n")
+                                println(contacto.nombre)
+                            }
+
+                            escritor.flush()
+                            escritor.close()
+
                         }
 
-                        escritor.flush()
-                        escritor.close()
                     }
                 }
             }
 
+        }
+    }//Fin de la función exportar.
+//Función para manejar la respuesta de los permisos...
 
-
-
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            REQUEST_CODE_WRITE_EXTERNAL_STORAGE -> {
+                // Si el usuario concede los permisos, continuar con la exportación de contactos
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    exportarContactosCSV()
+                } else {
+                    Toast.makeText(this@MainActivity, "Permiso de escritura denegado", Toast.LENGTH_SHORT).show()
+                }
             }
-
-
-
-        }//Fin de la función exportar.
-
-
-
-
+            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
+    }
 
 
 
