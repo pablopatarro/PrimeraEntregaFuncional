@@ -35,7 +35,7 @@ import java.io.FileWriter
 
 class MainActivity : AppCompatActivity() {
 
-    private val REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 1
+    private val REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 0
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel:MainViewModel
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_agenda, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_agenda
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -97,71 +97,10 @@ class MainActivity : AppCompatActivity() {
                 ventanaConfirmación()
                 return true
             }
-            R.id.exportarContactosCSV -> {
-                exportarContactosCSV()
-            return true
-        }
             else -> return super.onOptionsItemSelected(item)
         }
     }
 
-    private fun exportarContactosCSV() {
-        //Hacemos una corrutina para obtener los contactos...
-        mainViewModel.state.observe(this) {estado->
-            lifecycleScope.launch(Dispatchers.Main) {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    estado.contactos?.collect { contactos ->
-
-                        //Preguntar por permisos de escritura.
-                        if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            // Si los permisos no se han otorgado, mostrar diálogo para solicitarlos al usuario
-                            ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_WRITE_EXTERNAL_STORAGE)
-                        } else {
-                            // Si los permisos ya se han otorgado, continuar con la exportación de contactos
-                            //val archivoCSV = File(Environment.getExternalStorageDirectory().toString() + "/contactos.csv" )
-                            val carpeta = File(getExternalFilesDir(null),"Contactos")
-                            //Si la carpeta donde queremos guardar el fichero no existe, la creamos.
-                            if(!carpeta.exists())
-                            {
-                                carpeta.mkdir()
-                            }
-                            //Creamos el fichero, el writer y escribimos los contactos en el fichero.
-                            val ficheroCSV = File(carpeta,"contactos.csv")
-                            val escritor = FileWriter(ficheroCSV)
-                            escritor.append("nombre,telefono,email\n")
-
-                            println(contactos.toString())
-                            contactos.forEach { contacto ->
-                                escritor.append("${contacto.nombre},${contacto.telefono},${contacto.email}\n")
-                                println(contacto.nombre)
-                            }
-
-                            escritor.flush()
-                            escritor.close()
-
-                        }
-
-                    }
-                }
-            }
-
-        }
-    }//Fin de la función exportar.
-//Función para manejar la respuesta de los permisos...
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when (requestCode) {
-            REQUEST_CODE_WRITE_EXTERNAL_STORAGE -> {
-                // Si el usuario concede los permisos, continuar con la exportación de contactos
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    exportarContactosCSV()
-                } else {
-                    Toast.makeText(this@MainActivity, "Permiso de escritura denegado", Toast.LENGTH_SHORT).show()
-                }
-            }
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
-    }
 
 
 

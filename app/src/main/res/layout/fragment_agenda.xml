@@ -12,24 +12,24 @@
         android:background="#337B1FA2"
         android:orientation="vertical">
 
-
         <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
+            android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_margin="16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/view_contacto"/>
 
     </LinearLayout>
-
+       <include
+        android:id="@+id/imagenFondo"
+        layout="@layout/imagen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
         <include
             android:id="@+id/fab_space"
             layout="@layout/fab_space"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

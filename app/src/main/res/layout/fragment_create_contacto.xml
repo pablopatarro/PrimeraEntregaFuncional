@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.create.CreateContactoFragment"
+    android:background="#80E1BEE7"
     android:gravity="center"
     android:padding="10dp">
 

@@ -6,9 +6,4 @@
         android:orderInCategory="100"
         android:title="Borrar cuenta"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/exportarContactosCSV"
-        android:orderInCategory="100"
-        android:title="Exportar contactos a fichero CSV"
-        app:showAsAction="never" />
 </menu>

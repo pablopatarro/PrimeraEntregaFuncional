@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#807C4DFF"
-    tools:context=".ui.home.HomeFragment">
-
+    android:layout_height="match_parent">
     <ImageView
         android:id="@+id/imageFondo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@mipmap/ic_app_foreground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:alpha="0.65"/>
-
+        android:alpha="0.1"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

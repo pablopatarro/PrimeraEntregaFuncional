@@ -26,7 +26,8 @@
                 android:layout_width="300dp"
                 android:layout_height="280dp"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter"/>
+                android:scaleType="fitCenter"
+                android:layout_marginTop="10dp"/>
 
             <TextView
                 android:id="@+id/tvNombre"

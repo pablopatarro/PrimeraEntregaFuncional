@@ -82,20 +82,22 @@ class CreateContactoFragment : Fragment(R.layout.fragment_create_contacto) {
             }
             else
             {
-
-                var urlImagen = contactoAModificar.urlImagen.toString()
+                var urlImagen = contactoAModificar.urlImagen
                 if(URI_ACTUAL != null) {
                     val storageRef = FirebaseStorage.getInstance().reference
                     //Borramos la foto anterior...
-                    FirebaseStorage.getInstance().reference.child("fotos").child("foto_de_" + email).delete()
+                    FirebaseStorage
+                        .getInstance().reference
+                        .child("fotos").child("foto_de_" + contactoAModificar.email)
+                        .delete()
 
                     val refImagen = storageRef.child("fotos").child("foto_de_" + email)
+                    println(email)
                     //"subimos" la foto al storage.
                     val subidaFoto = refImagen.putFile(URI_ACTUAL!!)
                     subidaFoto.addOnSuccessListener {
                     refImagen.downloadUrl.addOnSuccessListener { uri ->
                         urlImagen = uri.toString()
-                        //Aquí debemos guardar la imagen en Storage, recuperar la url y mandarsela al contacto.
 
                     }
                 }//fin de la tarea de la foto
